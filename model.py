@@ -7,7 +7,6 @@ ASPECTS = ["Cleanliness", "Room", "Service / Staff", "Location", "Facilities", "
 class MiniMultimodalAspectModel(nn.Module):
     def __init__(self):
         super().__init__()
-        # Mock feature extractors & heads
         self.text_fc = nn.Linear(100, 32)
         self.img_fc = nn.Linear(100, 32)
         self.aspect_fc = nn.Linear(64, len(ASPECTS))
@@ -21,11 +20,6 @@ class MiniMultimodalAspectModel(nn.Module):
         return scores
 
 def predict_aspect_scores(review_text: str, image: Image.Image, star_rating: int):
-    """
-    Simulasi Step 1: Multimodal Aspect Scoring
-    Menerima teks, gambar, dan bintang hotel, lalu menghasilkan score & polarity per aspek.
-    """
-    # Dummy processing
     torch.manual_seed(len(review_text) + star_rating)
     t_dummy = torch.randn(1, 100)
     i_dummy = torch.randn(1, 100)
@@ -38,7 +32,7 @@ def predict_aspect_scores(review_text: str, image: Image.Image, star_rating: int
     
     results = {}
     for idx, aspect in enumerate(ASPECTS):
-        score = round(raw_scores[idx] * 5, 2) # skala 1-5
+        score = round(raw_scores[idx] * 5, 2)
         if score >= 3.5:
             polarity = "Positive"
         elif score >= 2.5:
@@ -53,9 +47,6 @@ def predict_aspect_scores(review_text: str, image: Image.Image, star_rating: int
     return results
 
 def get_star_tier_benchmark(star_rating: int):
-    """
-    Simulasi Step 2: Benchmark rata-rata aspek berdasarkan hotel star tier (1-5)
-    """
     base = star_rating * 0.8
     benchmarks = {
         "Cleanliness": round(min(5.0, base + 0.5), 2),
